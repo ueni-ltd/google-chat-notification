@@ -31,7 +31,6 @@ export async function notify(name: string, url: string, status: Status) {
   const checksUrl = `${repoUrl}${eventPath}/checks`;
 
   const body = {
-    thread: { name: repo + ref + sha  },
     cards: [{
       sections: [
         {
@@ -72,7 +71,7 @@ export async function notify(name: string, url: string, status: Status) {
     }]
   };
 
-  const response = await axios.default.post(url, body);
+  const response = await axios.default.post(url + '&threadKey=' + sha, body);
   if (response.status !== 200) {
     throw new Error(`Google Chat notification failed. response status=${response.status}`);
   }

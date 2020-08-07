@@ -5446,7 +5446,6 @@ function notify(name, url, status) {
         const eventUrl = `${repoUrl}${eventPath}`;
         const checksUrl = `${repoUrl}${eventPath}/checks`;
         const body = {
-            thread: { name: repo + ref + sha },
             cards: [{
                     sections: [
                         {
@@ -5486,7 +5485,7 @@ function notify(name, url, status) {
                     ]
                 }]
         };
-        const response = yield axios.default.post(url, body);
+        const response = yield axios.default.post(url + '&threadKey=' + sha, body);
         if (response.status !== 200) {
             throw new Error(`Google Chat notification failed. response status=${response.status}`);
         }
