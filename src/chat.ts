@@ -23,7 +23,7 @@ const textButton = (text: string, url: string) => ({
 
 export async function notify(name: string, url: string, status: Status) {
   const { owner, repo } = github.context.repo;
-  const { eventName, sha, ref, runId } = github.context;
+  const { eventName, sha, ref } = github.context;
   const { number } = github.context.issue;
   const repoUrl = `https://github.com/${owner}/${repo}`;
   const eventPath = eventName === 'pull_request' ? `/pull/${number}` : `/commit/${sha}`;
@@ -31,7 +31,7 @@ export async function notify(name: string, url: string, status: Status) {
   const checksUrl = `${repoUrl}${eventPath}/checks`;
 
   const body = {
-    thread: { name: "abc"},
+    thread: { name: repo + ref + sha  },
     cards: [{
       sections: [
         {
@@ -72,7 +72,7 @@ export async function notify(name: string, url: string, status: Status) {
     }]
   };
 
-  const response = await axios.default.post(url + '&threadKey=' + runId, body);
+  const response = await axios.default.post(url, body);
   if (response.status !== 200) {
     throw new Error(`Google Chat notification failed. response status=${response.status}`);
   }
