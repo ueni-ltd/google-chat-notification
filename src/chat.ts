@@ -31,6 +31,7 @@ export async function notify(name: string, url: string, status: Status) {
   const checksUrl = `${repoUrl}${eventPath}/checks`;
 
   const body = {
+    thread: { name: "abc"},
     cards: [{
       sections: [
         {
